@@ -64,7 +64,7 @@ export default function App() {
               playsInline
               preload="auto"
               poster="/new.jpeg"
-              muted={!hasInteracted}
+              muted={false}
               controls
               onEnded={() => setShowIntro(false)}
             />
