@@ -5,7 +5,9 @@ import { PRODUCTS, findProductBySlug } from './productsData.js';
 
 export default function App() {
   const [showIntro, setShowIntro] = useState(true);
+  const [hasInteracted, setHasInteracted] = useState(false);
   const videoRef = useRef(null);
+  const headerVideoRef = useRef(null);
   
   // Simple routing: get product from URL path
   const pathname = window.location.pathname.split('/').pop() || '';
@@ -16,29 +18,56 @@ export default function App() {
   }, [product]);
 
   useEffect(() => {
+    // Attempt to play intro if we have interacted or if browser allows it
     if (showIntro && videoRef.current) {
       videoRef.current.play().catch(error => {
         console.log("Autoplay with sound was prevented by browser:", error);
       });
     }
-  }, [showIntro]);
+  }, [showIntro, hasInteracted]);
+
+  useEffect(() => {
+    const handleInteraction = () => {
+      setHasInteracted(true);
+      
+      // Unmute and play intro video if it's there
+      if (videoRef.current) {
+        videoRef.current.muted = false;
+        videoRef.current.play().catch(e => console.log(e));
+      }
+      // Unmute and play header video
+      if (headerVideoRef.current) {
+        headerVideoRef.current.muted = false;
+        headerVideoRef.current.play().catch(e => console.log(e));
+      }
+    };
+    
+    document.addEventListener('click', handleInteraction, { once: true });
+    document.addEventListener('touchstart', handleInteraction, { once: true });
+    
+    return () => {
+      document.removeEventListener('click', handleInteraction);
+      document.removeEventListener('touchstart', handleInteraction);
+    };
+  }, []);
 
   return (
     <div className="min-h-screen w-full relative overflow-hidden">
       {/* Intro overlay */}
       {showIntro && (
         <div className="fixed inset-0 z-[200] bg-black flex items-center justify-center">
-          <video
-            ref={videoRef}
-            className="max-h-screen w-auto"
-            src="/intro take 4.mp4"
-            autoPlay
-            playsInline
-            preload="auto"
-            poster="/new.jpeg"
-            controls
-            onEnded={() => setShowIntro(false)}
-          />
+            <video
+              ref={videoRef}
+              className="max-h-screen w-auto"
+              src="/intro take 4.mp4"
+              autoPlay
+              playsInline
+              preload="auto"
+              poster="/new.jpeg"
+              muted={!hasInteracted}
+              controls
+              onEnded={() => setShowIntro(false)}
+            />
           <button
             className="absolute top-4 right-4 px-4 py-2 rounded-md bg-white/10 border border-white/30 text-white hover:bg-white/20"
             onClick={() => setShowIntro(false)}
@@ -57,10 +86,11 @@ export default function App() {
       <header className="pt-0 sm:pt-0 mt-6 sm:mt-8 pb-6 text-center select-none">
         <div className="mx-auto w-[320px] sm:w-[500px] max-w-[92vw] h-[200px] sm:h-[260px] rounded-2xl bg-white/8 border border-white/20 backdrop-blur-md overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.25)] transition-transform duration-300 hover:-translate-y-0.5 hover:shadow-[0_30px_60px_rgba(0,0,0,0.3)]">
             <video 
+              ref={headerVideoRef}
               src="/lo.mp4" 
               className="w-full h-full object-cover rounded-2xl bg-white/8 backdrop-blur-md ring-1 ring-white/20 shadow-inner" 
               autoPlay 
-              muted={false}
+              muted={!hasInteracted}
               loop 
               playsInline 
             />
