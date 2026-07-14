@@ -62,7 +62,7 @@ export const PRODUCTS = [
   {
     brand: 'Go Green/Atharv',
     specification: 'Humates (12.5%) (Liquid)',
-    category: '',
+    category: 'Humic and Fulvic acid and their derivatives',
     crops: ['Green gram'],
     dosage: ['Two soil applications at 5 litre/ha'],
     gazette: '16th February, 2026 S.O. 876(E)',
@@ -79,7 +79,7 @@ export const PRODUCTS = [
   {
     brand: 'G Humic Power',
     specification: 'Humic Acid 1.5% (Granules)',
-    category: '',
+    category: 'Humic and Fulvic acid and their derivatives',
     crops: ['Chilli'],
     dosage: ['Two soil applications at 30 kg/ha'],
     gazette: '16th February, 2026 S.O. 876(E)',

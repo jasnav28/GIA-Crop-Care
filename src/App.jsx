@@ -109,7 +109,7 @@ export default function App() {
               </div>
               <div className="flex-1">
                 <div className="text-[#d9c98f] text-xs sm:text-sm">Product Name:</div>
-                <div className="text-white text-xl sm:text-2xl font-semibold tracking-wide">{product.displayName || product.brand}</div>
+                <div className="text-white text-xl sm:text-2xl font-semibold tracking-wide break-words break-all sm:break-words">{product.displayName || product.brand}</div>
               </div>
             </div>
           </StarBorder>
